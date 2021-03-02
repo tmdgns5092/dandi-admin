@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>단디 | 관리자</title>
+  <link rel="shortcut icon" href="/dist/img/AdminLTELogo.png" type="image/x-icon">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="./plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="./plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="./plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+  <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css" rel="stylesheet">
+
+  <script src="./dist/js/includeHTML.js"></script>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+
+    <!-- Navbar -->
+    <div include-html="./include/navbar.html"></div>
+
+    <!-- Main Sidebar Container -->
+    <div include-html="./include/sidebar.html"></div>
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <!-- <ion-icon name="cash-outline"></ion-icon>
+              <h1 class="m-0">포럼</h1> -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">포럼 정보</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <!-- 포럼 -->
+                  <!-- <strong><i class="fas fa-book mr-1"></i> 포럼</strong> -->
+                  <table class="table">
+                    <tbody>
+                      <tr><td id="forum_title"></td></tr>
+                      <tr><td id="forum_end_date"></td></tr>
+                      <tr><td><img class="img-fluid" id="forum_img"/></td></tr>
+                    </tbody>
+                  </table>
+
+                  <hr>
+                  <!-- 피칭 -->
+                  <strong><i class="fas fa-map-marker-alt mr-1"></i> 실시간 피칭</strong><br />
+                  <input class="form-control" type="text" placeholder="youtube link" id="pitchingYt"/>
+                  <a href="javascript:void(0);" class="btn btn-primary" onclick="pitchingYtLinkSave()"><b>유튜브 링크 저장</b></a>
+                  <div class="embed-responsive">
+                    <iframe id="yt_iframe" width="853" height="480" src="" frameborder="0" allowfullscreen ng-show="showvideo"></iframe>
+                  </div>
+                  <hr>
+                  <!-- 참여기업 -->
+                  <strong><i class="fas fa-pencil-alt mr-1"></i> 참여기업 </strong><br />
+                  <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#modal-sm"><b>참여기업 추가</b></a>
+                  <table class="table">
+                    <thead>
+                      <th scope="col"></th>
+                      <th scope="col">#</th>
+                      <th scope="col">이름</th>
+                      <th scope="col">ir 자료</th>
+                      <th scope="col">소개 자료</th>
+                      <th scope="col">ir 자료 업로드</th>
+                      <th scope="col">소개 자료 업로드</th>
+                      <th scope="col">수정</th>
+                      <th scope="col">삭제</th>
+                    </thead>
+                    <tbody id="atten_com_tbody"></tbody>
+                  </table>
+                  <hr>
+                  <!-- 피칭 질문 -->
+                  <strong><i class="fas fa-pencil-alt mr-1"></i> 피칭 질문 </strong><br />
+                  <a href="javascript:void(0);" class="btn btn-primary" onclick="reloadQuestion()">
+                    <ion-icon name="reload-outline"></ion-icon>
+                  </a>
+                  <table id="questionTable"
+                    data-locale="ko-KR"
+                    data-toggle="table"
+                    data-height="460"
+                    data-ajax="loadQuestion"
+                    data-search="false"
+                    data-side-pagination="server"
+                    data-pagination="true"
+                    data-pagination-parts= "pageList">
+                    <thead>
+                      <tr>
+                        <th scope="col" data-field="id">#</th>
+                        <th scope="col" data-field="com_name">기업</th>
+                        <th scope="col" data-field="comment">본문</th>
+                        <th scope="col" data-field="name">질문자</th>
+                        <th scope="col" data-field="createdAt">날짜</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                    <hr>
+                  <!-- 신청자 -->
+                  <strong><i class="far fa-file-alt mr-1"></i> 신청자 </strong><br />
+                  <!-- <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#modal-request"><b>신청자 추가</b></a> -->
+                  <!-- <a href="javascript:void(0);" class="btn btn-primary" onclick="createAuthCode()"><b>신청자 보안코드 생성</b></a> -->
+                  <!-- <a href="javascript:void(0);" class="btn btn-primary" onclick="sendCodeMessage()"><b>보안코드 문자 발송</b></a> -->
+                  <table id="requestTable"
+                    data-locale="ko-KR"
+                    data-toggle="table"
+                    data-height="460"
+                    data-ajax="loadRequest"
+                    data-search="true"
+                    data-side-pagination="server"
+                    data-pagination="true"
+                    data-pagination-parts= "pageList">
+                    <thead>
+                      <th scope="col" data-field="ROWNUM">#</th>
+                      <th scope="col" data-field="name">이름</th>
+                      <th scope="col" data-field="email">이메일</th>
+                      <th scope="col" data-field="phone">휴대전화</th>
+                      <th scope="col" data-field="com_name">회사명</th>
+                      <th scope="col" data-field="position">직책</th>
+                      <th scope="col" data-field="auth_code">보안코드</th>
+                      <th scope="col" data-field="temperature">체온</th>
+                      <th data-field="operate1" data-formatter="updateOperateFormatter" data-events="operateEvents">수정</th>
+                      <th data-field="operate2" data-formatter="deleteOperateFormatter" data-events="operateEvents">삭제</th>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+            </div>
+          </div>
+          <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+      <!-- 참여기업 추가 모달  -->
+      <div class="modal fade" id="modal-sm">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">포럼 참여 기업 추가</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>이름</p>
+              <input class="form-control" type="text" placeholder="참여기업 이름" id="append_com_name"/>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="comAppend()">추가</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- 참여기업 수정 모달  -->
+      <div class="modal fade" id="modal-modify">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">포럼 참여 기업 수정</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>이름</p>
+              <input class="form-control" type="text" placeholder="참여기업 이름" id="modify_append_com_name"/>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="comUpdate()">완료</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- 신청자 추가 모달  -->
+      <div class="modal fade" id="modal-request">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">신청자 추가</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>이름</p>
+              <input class="form-control" type="text" placeholder="신청자 이름" id="request_name"/>
+              <p>이메일</p>
+              <input class="form-control" type="text" placeholder="신청자 이메일" id="request_email"/>
+              <p>휴대전화</p>
+              <input type="text" placeholder=" ' - ' 없이 입력해주세요" class="form-control datepicker-input" id="request_phone" name="request_phone" maxlength="18"
+                oninput="maxLengthCheck(this)"
+                onkeydown="onlyTel(this)"
+                onfocus="OnCheckPhone(this, event)"
+                onkeyup="OnCheckPhone(this, event)">
+              <p>회사명</p>
+              <input class="form-control" type="text" placeholder="신청자 회사명" id="request_com_name"/>
+              <p>직책</p>
+              <input class="form-control" type="text" placeholder="신청자 직책" id="request_position"/>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="requestAppend()">추가</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- 신청자 수정 모달  -->
+      <div class="modal fade" id="modal-request-update">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">신청자 수정</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>이름</p>
+              <input class="form-control" type="text" placeholder="신청자 이름" id="update_request_name"/>
+              <p>이메일</p>
+              <input class="form-control" type="text" placeholder="신청자 이메일" id="update_request_email"/>
+              <p>휴대전화</p>
+              <input type="text" placeholder=" ' - ' 없이 입력해주세요" class="form-control datepicker-input" id="update_request_phone" name="update_request_phone" maxlength="18"
+                oninput="maxLengthCheck(this)"
+                onkeydown="onlyTel(this)"
+                onfocus="OnCheckPhone(this, event)"
+                onkeyup="OnCheckPhone(this, event)">
+              <p>회사명</p>
+              <input class="form-control" type="text" placeholder="신청자 회사명" id="update_request_com_name"/>
+              <p>직책</p>
+              <input class="form-control" type="text" placeholder="신청자 직책" id="update_request_position"/>
+              <p>보안코드</p>
+              <input class="form-control" type="text" placeholder="신청자 보안코드" maxlength="6" oninput="maxLengthCheck(this)" onkeydown="onlyNumber(this)" id="update_request_auth_code"/>
+              <p>체온</p>
+              <input class="form-control" type="text" placeholder="신청자 체온" maxlength="6" oninput="maxLengthCheck(this)" id="update_request_temperature"/>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="requestUpdateSend()">완료</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- 참여기업 ir 업로드 -->
+      <div class="modal fade" id="modal-ir">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">포럼 참여 기업 IR자료 업로드</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="IR_FILE_FORM" method="post" enctype="multipart/form-data" action="">
+                <label for="exampleInputFile">* 첨부파일</label>
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="ir_file" name="file" accept="">
+                    <label class="custom-file-label" for="file" id="ir_fileName">IR 파일을 선택해 주세요</label>
+                  </div>
+                </div>
+              </form>
+
+              <label for="exampleInputFile">* 제목</label>
+              <div class="input-group">
+                <input type="text" class="form-control datepicker-input" id="ir_title" name="title"/>
+              </div>
+              <label for="exampleInputFile">* 설명</label>
+              <div class="input-group">
+                <textarea class="form-control" id="ir_comment" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="irUpload()">업로드</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- 참여기업 소개자료 업로드 -->
+      <div class="modal fade" id="modal-introduce">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">포럼 참여 기업 소개자료 업로드</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="INTRODUCE_FILE_FORM" method="post" enctype="multipart/form-data" action="">
+                <label for="exampleInputFile">* 첨부파일</label>
+                <div class="input-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="introduce_file" name="file" accept="">
+                    <label class="custom-file-label" for="file" id="introduce_fileName">소개자료를 선택해 주세요</label>
+                  </div>
+                </div>
+              </form>
+
+              <label for="exampleInputFile">* 제목</label>
+              <div class="input-group">
+                <input type="text" class="form-control datepicker-input" id="introduce_title" name="title"/>
+              </div>
+              <label for="exampleInputFile">* 설명</label>
+              <div class="input-group">
+                <textarea class="form-control" id="introduce_comment" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="introduceUpload()">업로드</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <!-- 보안코드 문자발송 -->
+      <div class="modal fade" id="message">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">보안코드 문자 발송</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              본문
+              <textarea name="" id="message-text" class="form-control" placeholder="문자를 입력해주세요." rows="5" onkeyup="messageTextPress(this)"></textarea>
+              <div class="message_byte">
+                <span id="text_byte">0</span> / <span id="max_byte">90</span> Byte
+              </div>
+
+              <div name="type">
+                <button class="btn btn-default methodType active" data-value="sms" id="methodType-SMS" name="typeBtn">단문</button>
+                <button class="btn btn-default methodType" data-value="lms" id="methodType-LMS" name="typeBtn">장문</button>
+              </div>
+              <!-- <button class="btn methodType" data-value="mms" id="methodType-MMS" name="typeBtn">이미지</button> -->
+              <button type="button" class="btn btn-default" onclick="blockNum()">수신거부 삽입</button>
+
+              <button class="btn btn-default" onclick="receiverAppend()">수신자명 : {{수신자}}</button>
+              <button class="btn btn-default" onclick="authCodeAppend()">보안코드 : {{보안코드}}</button>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="messageSend()">발송</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <div include-html="./include/footer.html"></div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+$.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+<!-- AdminLTE for demo purposes -->
+<!-- <script src="dist/js/demo.js"></script> -->
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- <script src="dist/js/pages/dashboard.js"></script> -->
+<!-- utils -->
+<script src="dist/js/utils.js"></script>
+<!-- Icons -->
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<!-- jQuery Core 3.5.1 -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- tooltip -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+<!-- User Sciprt -->
+<script>includeHTML();</script>
+<script>
+var _value = new Array();
+var _id, _com_name, _user_id, _request_id, _pitching_id;
+$(document).ready(function() {
+
+  if(!$.cookie('loginCheck') || $.cookie('loginCheck') != "check")
+    window.location.href = `index.html`;
+
+  // parameter set
+  var url      = unescape(location.href);
+  var pm       = url.split('?');
+  var params   = pm[1].split('&');
+  params.forEach((param, index) => {
+    var data = param.split('=');
+    var id = data[0];
+    var val = data[1];
+    var tmp = { id: val };
+    _value.push(tmp)
+  });
+
+
+  $.ajax(
+    {
+      type:     "get",
+      // url:      "http://210.114.1.125:3000/forum/",
+      url:      "http://210.114.1.125:3000/forum/",
+      data:     _value[0],
+      dataType: "json",
+      success: data => {
+        if(data.pitching)
+          _pitching_id = data.pitching.id;
+        // console.log(data)
+        // forum
+        $('#forum_title').text(`제목 :  ${data.forum.title}`)
+        $('#forum_end_date').text(`마감일 : ${data.forum.end_date}`)
+        // $('#forum_img').attr('src', `http://210.114.1.125:3000/forum/img/${data.img.name}`)
+        $('#forum_img').attr('src', `http://210.114.1.125:3000/forum/img/${data.img.name}`)
+        // coms
+        data.coms.forEach((com, index) => {
+          console.log(com);
+          let ir = '', introduce = '';
+          if(com.ir_name)
+            // ir = `<a href='http://210.114.1.125:3000/atten/ir/download/${com.ir_name}'>${com.ir_org_name}</a>`
+            ir = `<a href='http://210.114.1.125:3000/atten/ir/download/${com.ir_name}'>${com.ir_org_name}</a>`
+          if(com.introduce_name)
+            // introduce = `<a href='http://210.114.1.125:3000/atten/introduce/download/${com.introduce_name}'>${com.introduce_org_name}</a>`
+            introduce = `<a href='http://210.114.1.125:3000/atten/introduce/download/${com.introduce_name}'>${com.introduce_org_name}</a>`
+
+          $('#atten_com_tbody').append(`
+            <tr data-value="${com.id}">
+              <td></td>
+              <td>${index + 1}</td>
+              <td name="com_name">${com.name}</td>
+              <td>${ir}</td>
+              <td>${introduce}</td>
+              <td>
+                <a class="ir" href="javascript:void(0)" title="ir" data-toggle="modal" data-target="#modal-ir" onclick="irCall(this)">
+                  <i class="fa fa-upload"></i>
+                </a>
+              </td>
+              <td>
+                <a class="introduce" href="javascript:void(0)" title="introduce" data-toggle="modal" data-target="#modal-introduce" onclick="introduceCall(this)">
+                  <i class="fa fa-upload"></i>
+                </a>
+              </td>
+              <td>
+                <a class="introduce" href="javascript:void(0)" title="introduce" data-toggle="modal" data-target="#modal-modify" onclick="comUpdateModalOpen(this)">
+                  <i class="fa fa-brush"></i>
+                </a>
+              </td>
+              <td>
+                <a class="introduce" href="javascript:void(0)" title="introduce" onclick="comDelete(this)">
+                  <ion-icon name="close-circle-outline"></ion-icon>
+                  <i class="fa fa-x"></i>
+                </a>
+              </td>
+            </tr>
+          `);
+        });
+        if(data.pitching){
+          $('#pitchingYt').val(`https://www.youtube.com/embed/${data.pitching.yt_link}`);
+          $('#yt_iframe').attr('src', `https://www.youtube.com/embed/${data.pitching.yt_link}`);
+          $('#yt_iframe').closest('div').addClass('embed-responsive-16by9')
+        }
+      },
+      error: error =>  { console.log(error) }
+    });
+  });
+
+  $("#ir_file").on('change',function(){
+    let change = $(this).val();
+    let fileTmp = change.split('\\');
+    let size = fileTmp.length;
+    $('#ir_fileName').text(fileTmp[size - 1]);
+  });
+  $("#introduce_file").on('change',function(){
+    let change = $(this).val();
+    let fileTmp = change.split('\\');
+    let size = fileTmp.length;
+    $('#introduce_fileName').text(fileTmp[size - 1]);
+  });
+
+  function comAppend(){
+    let com_name = $('#append_com_name').val();
+
+    if(!com_name){
+      alert('참여기업 이름을 입력해주세요.')
+      $('#append_com_name').focus();
+      return false;
+    }
+
+    $.ajax(
+      {
+        type:     "post",
+        // url:      "http://210.114.1.125:3000/atten/",
+        url:      "http://210.114.1.125:3000/atten/",
+        data:     { forum_id: _value[0].id, com_name: com_name },
+        dataType: "json",
+        success: data => {
+          if(data.message == 'Already a atten_com'){
+            alert('이미 등록된 기업명 입니다.')
+            $('#append_com_name').focus();
+            return false;
+          }
+          else{
+            let index = $('#atten_com_tbody tr').length;
+            $('#atten_com_tbody').append(`
+              <tr data-value="${data.com.id}">
+                <td></td>
+                <td>${index + 1}</td>
+                <td name="com_name">${com_name}</td>
+                <td></td>
+                <td></td>
+                <td>
+                  <a class="ir" href="javascript:void(0)" title="ir" data-toggle="modal" data-target="#modal-ir" onclick="irCall(this)">
+                    <i class="fa fa-upload"></i>
+                  </a>
+                </td>
+                <td>
+                  <a class="introduce" href="javascript:void(0)" title="introduce" data-toggle="modal" data-target="#modal-introduce" onclick="introduceCall(this)">
+                    <i class="fa fa-upload"></i>
+                  </a>
+                </td>
+                <td>
+                  <a class="introduce" href="javascript:void(0)" title="introduce" data-toggle="modal" data-target="#modal-modify" onclick="comUpdateModalOpen(this)">
+                    <i class="fa fa-brush"></i>
+                  </a>
+                </td>
+                <td>
+                  <a class="introduce" href="javascript:void(0)" title="introduce" onclick="comDelete(this)">
+                    <ion-icon name="close-circle-outline"></ion-icon>
+                    <i class="fa fa-x"></i>
+                  </a>
+                </td>
+              </tr>`);
+            $("#modal-sm .close").click()
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function requestAppend(){
+    // console.log('requestAppend');
+    let name      = $('#request_name').val();
+    let email     = $('#request_email').val();
+    let phone     = $('#request_phone').val();
+    let com_name  = $('#request_com_name').val();
+    let position  = $('#request_position').val();
+
+    if(!name) {
+      alert('이름을 입력해 주세요.')
+      $('#request_name').focus();
+      return false;
+    }
+    if(!email) {
+      alert('이메일을 입력해 주세요.')
+      $('#request_name').focus();
+      return false;
+    }
+    if(!phone) {
+      alert('휴대전화를 입력해 주세요.')
+      $('#request_name').focus();
+      return false;
+    }
+    if(!com_name) {
+      alert('회사명을 입력해 주세요.')
+      $('#request_name').focus();
+      return false;
+    }
+    if(!position) {
+      alert('직책을 입력해 주세요.')
+      $('#request_name').focus();
+      return false;
+    }
+
+    $.ajax(
+      {
+        type:     "post",
+        // url:      "http://210.114.1.125:3000/request/",
+        url:      "http://210.114.1.125:3000/request/",
+        data:     {
+          forum_id    : _value[0].id,
+          name        :name,
+          email       :email,
+          phone       :phone,
+          com_name    :com_name,
+          position    :position,
+        },
+        dataType: "json",
+        success: data => {
+          // console.log("test...");
+          // console.log(data);
+          if(data.message == 'Already a request'){
+            alert('이미 등록된 참여자 입니다.')
+            $('#request_name').focus();
+            return false;
+          }
+          else{
+            let params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+            // var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+            var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+            $.get(url+'?' + $.param(params.data)).then(function (res) {
+              $('#requestTable').bootstrapTable('load', res);
+              $('#requestTable').bootstrapTable('selectPage', 1);
+              $('#modal-request').modal('hide');
+              });
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function pitchingYtLinkSave(){
+    let yt = $('#pitchingYt').val();
+
+    if(yt.indexOf('/watch?') > 0){
+      let index1 = yt.indexOf('v=');
+      let index2 = yt.indexOf('&');
+      // console.log('index1');
+      // console.log(index1)
+      yt = yt.substring(index1 + 2, index2)
+      // console.log(link);
+    }
+    else{
+      if(yt.indexOf('?') > 0)
+        yt = yt.substring(0, yt.indexOf('?'))
+      let yt_tmp = yt.split("/");
+      yt = yt_tmp[yt_tmp.length -1];
+    }
+
+
+    let id = _value[0].id;
+    $.ajax(
+      {
+        type:     "post",
+        // url:      `http://210.114.1.125:3000/pitching/${id}`,
+        url:      `http://210.114.1.125:3000/pitching/${id}`,
+        data:     {
+          yt_link: yt,
+        },
+        dataType: "json",
+        success: data => {
+          // console.log(data);
+          $('#yt_anchor').attr('href', yt);
+          alert('저장 완료');
+          $('#yt_iframe').attr('src', `https://www.youtube.com/embed/${yt}`);
+          if(!$('#yt_iframe').closest('div').hasClass('embed-responsive-16by9'))
+            $('#yt_iframe').closest('div').addClass('embed-responsive-16by9')
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function createAuthCode(){
+    console.log("create auth code")
+    $.ajax(
+      {
+        type:     "post",
+        // url:      `http://210.114.1.125:3000/auth/list/${_value[0].id}`,
+        url:      `http://210.114.1.125:3000/auth/list/${_value[0].id}`,
+        data:     {},
+        dataType: "json",
+        success: data => {
+          console.log(data)
+          if(data.message == 'not found users'){
+            return false;
+          } else {
+            let params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+            // var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+            var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+            $.get(url+'?' + $.param(params.data)).then(function (res) {
+              console.log(res);
+              $('#requestTable').bootstrapTable('load', res);
+              $('#requestTable').bootstrapTable('selectPage', 1);
+              });
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+// Table.bulkCreate([
+//      {ID: '0', Name: 'Leo', Age: 21, CurrentState: 5},
+//      {ID: '1', Name: 'George', Age: 26, , CurrentState: 6},
+//      {ID: '2', Name: 'Diana', Age: 27, , CurrentState: 4}
+// ], {
+//      updateOnDuplicate: ['Name','CurrentState']
+// })
+
+  function randomString() {
+    // var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    var chars = "0123456789";
+    var string_length = 6;
+    var randomstring = '';
+    for (var i=0; i<string_length; i++) {
+      var rnum = Math.floor(Math.random() * chars.length);
+      randomstring += chars.substring(rnum,rnum+1);
+    }
+    return randomstring;
+  }
+
+  function irCall(obj) {
+    let com_id = $(obj).closest('tr').attr('data-value');
+    _id = com_id;
+    $.ajax(
+      {
+        type:     "get",
+        // url:      `http://210.114.1.125:3000/atten/ir/${com_id}`,
+        url:      `http://210.114.1.125:3000/atten/ir/${com_id}`,
+        data:     {},
+        dataType: "json",
+        success: data => {
+          // $('#ir_fileName').text(data.org_name);
+          $('#ir_title').val(data.title);
+          $('#ir_comment').val(data.comment);
+        },
+        error: error =>  {
+          $('#ir_title').val('');
+          $('#ir_comment').val('');
+        }
+      });
+  }
+
+  function introduceCall(obj) {
+    let com_id = $(obj).closest('tr').attr('data-value');
+    _id = com_id;
+    $.ajax(
+      {
+        type:     "get",
+        // url:      `http://210.114.1.125:3000/atten/introduce/${com_id}`,
+        url:      `http://210.114.1.125:3000/atten/introduce/${com_id}`,
+        data:     {},
+        dataType: "json",
+        success: data => {
+          // console.log(data);
+          if(data.id){
+            // $('#ir_fileName').text(data.org_name);
+            $('#ir_title').val(data.title);
+            $('#ir_comment').val(data.comment);
+          }
+          else {
+            console.log('data empty')
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function irUpload() {
+    let file   = $('#modal-ir').find('input[type=file]')[0].files[0];
+    let title   = $('#ir_title').val();
+    let comment = $('#ir_comment').val();
+
+    if(!file) {
+      alert('파일을 선택해 주세요')
+      $('#modal-ir').find('input[type=file]').focus();
+      return false;
+    }
+    if(!title){
+      alert('제목을 입력해 주세요')
+      $('#ir_title').focus();
+      return false;
+    }
+    if(!comment){
+      alert('설명을 입력해 주세요')
+      $('#ir_comment').focus();
+      return false;
+    }
+    var form = $('#IR_FILE_FORM')[0];
+    // INTRODUCE_FILE_FORM
+    var formData = new FormData(form);
+    // formData.append("img", $("#img")[0].files);
+    formData.append("notice_id", _value[0].id);
+    formData.append("title", title);
+    formData.append("comment", comment);
+
+    $.ajax(
+      {
+        type:     "post",
+        // url:      `http://210.114.1.125:3000/atten/ir/${_id}`,
+        url:      `http://210.114.1.125:3000/atten/ir/${_id}`,
+        data:     formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        async: false,
+        success: data => {
+          // console.log(data)
+          if(data.message == 'ir file upload success'){
+            alert('업로드 완료');
+            window.location.href = `forumInfo.html?id=${_value[0].id}`;
+            // $('#modal-ir').find(".close").click();
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+
+  }
+
+  function introduceUpload() {
+    let file    = $('#modal-introduce').find('input[type=file]')[0].files[0];
+    let title   = $('#introduce_title').val();
+    let comment = $('#introduce_comment').val();
+
+    if(!file) {
+      alert('파일을 선택해 주세요')
+      $('#modal-introduce').find('input[type=file]').focus();
+      return false;
+    }
+    if(!title){
+      alert('제목을 입력해 주세요')
+      $('#introduce_title').focus();
+      return false;
+    }
+    if(!comment){
+      alert('설명을 입력해 주세요')
+      $('#introduce_comment').focus();
+      return false;
+    }
+    var form = $('#INTRODUCE_FILE_FORM')[0];
+    // INTRODUCE_FILE_FORM
+    var formData = new FormData(form);
+    // formData.append("img", $("#img")[0].files);
+    formData.append("notice_id", _value[0].id);
+    formData.append("title", title);
+    formData.append("comment", comment);
+
+    $.ajax(
+      {
+        type:     "post",
+        // url:      `http://210.114.1.125:3000/atten/introduce/${_id}`,
+        url:      `http://210.114.1.125:3000/atten/introduce/${_id}`,
+        data:     formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        async: false,
+        success: data => {
+          if(data.message == 'introduce file upload success'){
+            alert('업로드 완료');
+            window.location.href = `forumInfo.html?id=${_value[0].id}`;
+            // $('#modal-introduce').find(".close").click();
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+
+  }
+
+  function comDelete(obj){
+    let com_id = $(obj).closest('tr').attr('data-value');
+    let conf = confirm("해당 기업을 정말 삭제하시겠습니까?\n삭제 후 복구는 불가능합니다.")
+    if(conf)
+      $.ajax(
+        {
+          type:     "delete",
+          // url:      `http://210.114.1.125:3000/atten/${com_id}`,
+          url:      `http://210.114.1.125:3000/atten/${com_id}`,
+          data:     {},
+          dataType: "json",
+          async: false,
+          success: data => {
+            if(data.message == "delete success")
+              window.location.href = `forumInfo.html?id=${_value[0].id}`;
+            else {
+              alert('잠시 후 다시 시도해 주세요.');
+              window.location.href = `forumInfo.html?id=${_value[0].id}`;
+            }
+          },
+          error: error =>  { console.log(error) }
+        });
+  }
+
+  function comUpdateModalOpen(obj) {
+    let com_id = $(obj).closest('tr').attr('data-value');
+    let com_name = $(obj).closest('tr').find('td[name=com_name]').text();
+    _id       = com_id;
+    _com_name = com_name;
+    $('#modify_append_com_name').val(_com_name);
+  }
+
+  function comUpdate(){
+    $.ajax(
+      {
+        type:     "put",
+        // url:      `http://210.114.1.125:3000/atten/${_id}`,
+        url:      `http://210.114.1.125:3000/atten/${_id}`,
+        data:     {name: $('#modify_append_com_name').val()},
+        dataType: "json",
+        async: false,
+        success: data => {
+          if(data.message == "atten com update success")
+            window.location.href = `forumInfo.html?id=${_value[0].id}`;
+          else {
+            alert('잠시 후 다시 시도해 주세요.');
+            window.location.href = `forumInfo.html?id=${_value[0].id}`;
+          }
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function requestUpdateSend() {
+    let usersIndexArray = new Array();
+    $('#request_tbody > tr').each((index, tr) => {
+      usersIndexArray.push($(tr).attr('data-value'));
+    })
+
+    let userData = {
+      user: {
+        name:       $('#update_request_name').val(),
+        email:      $('#update_request_email').val(),
+        phone:      $('#update_request_phone').val(),
+        com_name:   $('#update_request_com_name').val(),
+        position:   $('#update_request_position').val(),
+      },
+      auth_code:  $('#update_request_auth_code').val(),
+      forum_id:   _value[0].id,
+      request_id: _request_id,
+      ne_user_id: usersIndexArray,
+      temperature: $('#update_request_temperature').val(),
+    }
+    $.ajax(
+      {
+        type:     "put",
+        // url:      `http://210.114.1.125:3000/request/`,
+        url:      `http://210.114.1.125:3000/request/`,
+        data:     userData,
+        dataType: "json",
+        async: false,
+        success: data => {
+          console.log(data)
+          if(data.message == "auth_code is Already") {
+            alert('VIP중 해당 보안코드를 사용중입니다.\n다른 보안코드를 입력해 주세요.')
+            $('#update_request_auth_code').val('');
+            $('#update_request_auth_code').focus();
+            return false;
+          } else if (data.message == "request auth_code is Already"){
+            alert('해당 보안코드를 사용중입니다.\n다른 보안코드를 입력해 주세요.')
+            $('#update_request_auth_code').val('');
+            $('#update_request_auth_code').focus();
+            return false;
+          }
+
+          let params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+          // var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+          var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+          $.get(url+'?' + $.param(params.data)).then(function (res) {
+            $('#requestTable').bootstrapTable('load', res);
+            $('#requestTable').bootstrapTable('selectPage', 1);
+            $('#modal-request-update').modal('hide');
+            });
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function reloadQuestion() {
+    let params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+    var _url = unescape(location.href);
+    var t = _url.split('?');
+    var p = t[1];
+    var t2 = p.split('=')
+    var id = t2[1];
+    // var url = `http://210.114.1.125:3000/question/table/${id}`
+    var url = `http://210.114.1.125:3000/question/table/${id}`
+    $.get(url+'?' + $.param(params.data)).then(function (res) {
+      console.log(res)
+      res.rows.forEach((item, index) => {
+        if(item.is_vip > 0) {
+          res.rows[index].name          = item.vip_name
+          res.rows[index].email         = item.vip_email
+          res.rows[index].phone         = item.vip_phone
+          res.rows[index].user_com_name = item.vip_com_name
+        }
+      })
+      // console.log(" :  talbe")
+      // console.log(res);
+        $('#questionTable').bootstrapTable('load', res);
+        $('#questionTable').bootstrapTable('selectPage', 1);
+      });
+  }
+
+  function loadQuestion(params) {
+    if(!params)
+      params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+    var _url = unescape(location.href);
+    var t = _url.split('?');
+    var p = t[1];
+    var t2 = p.split('=')
+    var id = t2[1];
+    // var url = `http://210.114.1.125:3000/question/table/${id}`
+    var url = `http://210.114.1.125:3000/question/table/${id}`
+    let responseList = new Array();
+    $.get(url+'?' + $.param(params.data)).then(function (res) {
+      // console.log(res.rows)
+      res.rows.forEach((item, index) => {
+        // console.log(item)
+        if(item.is_vip > 0) {
+          res.rows[index].name          = item.vip_name
+          res.rows[index].email         = item.vip_email
+          res.rows[index].phone         = item.vip_phone
+          res.rows[index].user_com_name = item.vip_com_name
+        }
+      })
+      // console.log(" :  talbe")
+      // console.log(res);
+      params.success(res)
+      });
+  }
+
+  function loadRequest(params){
+    if(!params)
+      params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+    var _url = unescape(location.href);
+    var t = _url.split('?');
+    var p = t[1];
+    var t2 = p.split('=')
+    var id = t2[1];
+    // var url = `http://210.114.1.125:3000/request/table/${id}`
+    var url = `http://210.114.1.125:3000/request/table/${id}`
+    $.get(url+'?' + $.param(params.data)).then(function (res) {
+        params.success(res)
+      });
+  }
+
+  function updateOperateFormatter() {
+    return [
+      '<a class="update" href="javascript:void(0)" title="Update" data-toggle="modal" data-target="#modal-request-update">',
+      '<i class="fa fa-search"></i>',
+      '</a>  ',
+    ].join('')
+  }
+
+  function deleteOperateFormatter() {
+    return [
+      '<a class="delete" href="javascript:void(0)" title="Update">',
+      '<i class="fa fa-backspace"></i>',
+      '</a>  ',
+    ].join('')
+  }
+
+  window.operateEvents = {
+    'click .update': function (e, value, row, index) {
+      // _request_id = row.request_id
+      $('#update_request_name').val(row.name);
+      $('#update_request_email').val(row.email);
+      $('#update_request_phone').val(row.phone);
+      $('#update_request_com_name').val(row.com_name);
+      $('#update_request_position').val(row.position);
+      $('#update_request_auth_code').val(row.auth_code);
+      $('#update_request_temperature').val(row.temperature);
+      _user_id = row.id;
+      _request_id = row.request_id;
+    },
+    'click .delete': function (e, value, row, index) {
+      let requestid = row.request_id;
+      console.log(requestid);
+      let conf = confirm("해당 신청자를 정말 삭제하시겠습니까?\n삭제 후 복구는 불가능합니다.")
+      if(conf)
+        $.ajax(
+          {
+            type:     "delete",
+            // url:      `http://210.114.1.125:3000/request/${requestid}`,
+            url:      `http://210.114.1.125:3000/request/${requestid}`,
+            data:     {},
+            dataType: "json",
+            async: false,
+            success: data => {
+              let params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+              // var url = `http://210.114.1.125:3000/request/table/${id}`
+              var url = `http://210.114.1.125:3000/request/table/${_value[0].id}`
+              $.get(url+'?' + $.param(params.data)).then(function (res) {
+                $('#requestTable').bootstrapTable('load', res);
+                $('#requestTable').bootstrapTable('selectPage', 1);
+              });
+              // window.location.href = `forumInfo.html?id=${_value[0].id}`;
+            },
+            error: error =>  { console.log(error) }
+          });
+    },
+  }
+
+  function sendCodeMessage() {
+    $('#message').modal('show')
+  }
+
+  function authCodeAppend(){
+    let text = $('#message-text').val();
+    $('#message-text').val(text + '{{보안코드}}');
+    $('#message-text').focus();
+  }
+  function receiverAppend(){
+    let text = $('#message-text').val();
+    $('#message-text').val(text + '{{수신자}}');
+    $('#message-text').focus();
+  }
+
+  function messageSend() {
+    let content = $('#message-text').val()
+    let forum_id = _value[0].id
+    let type = $('#max_byte').text()
+    if(!content) {
+      alert('발송내용을 작성해주세요')
+      $('#message-text').focus();
+      return false
+    }
+
+    if(type == 90)
+      type = 'sms'
+    else
+      type = 'lms'
+
+    let sendNum = '';
+    $.ajax(
+      {
+        type:     "get",
+        // url:      "http://210.114.1.125:3000/message/senderList",
+        url:      "http://210.114.1.125:3000/message/senderList",
+        data:     {},
+        dataType: "json",
+        async:    false,
+        success: data => {
+          data.list.forEach((number, index) => {
+            if(number.representYN) {
+              sendNum = number.number;
+            }
+          });
+        },
+        error: error =>  { console.log(error) }
+      });
+
+    if(!sendNum){
+      alert('대표 발신번호를 등록해 주세요.')
+      window.location.href = `message.html`;
+      return false;
+    }
+
+    $.ajax(
+      {
+        type:     "post",
+        // url:      `http://210.114.1.125:3000/request/${requestid}`,
+        url:      `http://210.114.1.125:3000/message/list/${forum_id}`,
+        data:     {
+          content:  content,
+          method:   type,
+          sendNum:  sendNum
+        },
+        dataType: "json",
+        async: false,
+        success: data => {
+          // console.log(data)
+          if(data.message == "success"){
+            alert('보안코드를 발송했습니다.')
+            $('#message').modal("hide");
+          } else {
+            alert('잠시 후 다시 시도해주세요.')
+            window.location.href = `forumInfo.html?id=${_value[0].id}`;
+          }
+        },
+        error: error =>  {
+          console.log(error)
+          alert(error.responseJSON.message)
+        }
+      });
+  }
+
+  function messageTextPress(obj){
+    var byte;
+    if($('#methodType-SMS').hasClass('active')) byte = 90;
+    else byte = 2000;
+
+    if(calByte.getByteLength($(obj).val()) > byte){
+        alert('제한된 글자수를 넘었습니다.');
+        $(obj).val(calByte.cutByteLength($(obj).val(), byte));
+    }
+
+    $('#text_byte').text(calByte.getByteLength($(obj).val()));
+  }
+
+  $('button[name=typeBtn]').click(function () {
+    var type = $(this).attr('data-value');
+    var sms = $('#methodType-SMS');
+    var lms = $('#methodType-LMS');
+    if(type == 'sms') {
+        sms.attr('class', 'btn btn-default methodType active');
+        lms.attr('class', 'btn btn-default methodType');
+        $('#max_byte').text(90);
+    } else if(type == 'lms'){
+        sms.attr('class', 'btn btn-default methodType');
+        lms.attr('class', 'btn btn-default methodType active');
+        $('#max_byte').text(2000);
+    }
+    messageTextPress($('#send-message-text'));
+  });
+  function blockNum(){
+        var ta = $('#message-text');
+        var txt = ta.val();
+        txt += '\r\n무료수신거부\r\n080-880-4177';
+        ta.val(txt);
+        messageTextPress(ta);
+        $('#message-text').focus();
+  }
+</script>
+</body>
+</html>

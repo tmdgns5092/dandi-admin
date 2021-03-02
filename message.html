@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>단디 | 관리자</title>
+  <link rel="shortcut icon" href="/dist/img/AdminLTELogo.png" type="image/x-icon">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="./plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="./plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="./plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <!-- <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css"> -->
+  <!-- date picker -->
+  <link rel="stylesheet" href="./plugins/bootstrap-datepicker/bootstrap-datepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
+  <link href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css" rel="stylesheet">
+
+
+
+  <script src="./dist/js/includeHTML.js"></script>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+
+    <!-- Navbar -->
+    <div include-html="./include/navbar.html"></div>
+
+    <!-- Main Sidebar Container -->
+    <div include-html="./include/sidebar.html"></div>
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <!-- <ion-icon name="cash-outline"></ion-icon>
+              <h1 class="m-0">포럼</h1> -->
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header border-0">
+                  <h2 class="card-title">문자 이력</h2>
+                </div>
+                <div class="card-body table-responsive">
+                  <span><strong>잔여 포인트</strong> </span>
+                  <span class="info-box-number">
+                    <span id="remainPoint">0</span>
+                    <small>p</small>
+                  </span><br />
+                  <span><strong>발신번호</strong> </span>
+                  <span class="info-box-number">
+                    <span id="senderNumber"></span>
+                    <small></small>
+                  </span><br />
+                  <!-- <span>잔여 포인트 : <span></span></span>&nbsp;&nbsp;&nbsp; -->
+                  <a href="javascript:void(0);" class="btn btn-primary" onclick="getChargeURL()"><b>문자 충전</b></a>
+                  <a href="javascript:void(0);" class="btn btn-primary" onclick="getSenderNumberMgtURL()"><b>발신번호 관리</b></a>
+                  <a href="javascript:void(0);" class="btn btn-primary" data-toggle="modal" data-target="#modal-message"><b>문자 발송</b></a>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <!-- <table id="forum" class="table"> -->
+                      <table id="notice"
+                        data-locale="ko-KR"
+                        data-toggle="table"
+                        data-height="460"
+                        data-ajax="messageRequest"
+                        data-search="false"
+                        data-side-pagination="server"
+                        data-pagination="true"
+                        data-pagination-parts= "pageList">
+                        <!-- <table id="questionTable"
+                          data-locale="ko-KR"
+                          data-toggle="table"
+                          data-height="460"
+                          data-ajax="loadQuestion"
+                          data-search="false"
+                          data-side-pagination="server"
+                          data-pagination="true"
+                          data-pagination-parts= "pageList"> -->
+                        <thead>
+                          <tr>
+                            <!-- <th scope="col" data-field="ROWNUM">#</th> -->
+                            <th scope="col" data-field="count">건</th>
+                            <th scope="col" data-field="stat">상태</th>
+                            <th scope="col" data-field="rlt">결과</th>
+                            <th scope="col" data-field="createdAt">수신일</th>
+                            <th scope="col" data-field="sendDate">발신일</th>
+                            <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents">Item Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+      <!-- 포럼 추가 모달  -->
+      <div class="modal fade" id="modal-message">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">신청자 추가</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              수신번호
+              <input type="text" placeholder=" ' - ' 없이 입력해주세요" class="form-control" id="receiveNum" maxlength="18"
+                oninput="maxLengthCheck(this)"
+                onkeydown="onlyTel(this)"
+                onfocus="OnCheckPhone(this, event)"
+                onkeyup="OnCheckPhone(this, event)">
+              수신자명
+              <input type="text" id="receiveName" placeholder="수신자 이름" maxlength="8" class="form-control" oninput="maxLengthCheck(this)"/>
+              본문
+              <textarea name="" id="send-message-text" class="form-control" placeholder="문자를 입력해주세요." rows="5" onkeyup="messageTextPress(this)"></textarea>
+
+              <div class="message_byte">
+                <span id="text_byte">0</span> / <span id="max_byte">90</span> Byte
+              </div>
+
+              <div name="type">
+                <button class="btn btn-default methodType active" data-value="sms" id="methodType-SMS" name="typeBtn">단문</button>
+                <button class="btn btn-default methodType" data-value="lms" id="methodType-LMS" name="typeBtn">장문</button>
+              </div>
+              <!-- <button class="btn methodType" data-value="mms" id="methodType-MMS" name="typeBtn">이미지</button> -->
+              <button type="button" class="btn btn-default" onclick="blockNum()">수신거부 삽입</button>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary toastsDefaultSuccess" onclick="messageSend()">발송</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+
+      <div class="modal fade" id="modal-view-message">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">문자이력 확인</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              수신번호
+              <input type="text" placeholder=" ' - ' 없이 입력해주세요" class="form-control" id="view_receiveNum" readonly>
+              수신자명
+              <input type="text" id="view_receiveName" placeholder="수신자 이름" class="form-control" readonly/>
+              본문
+              <textarea name="" id="view_send-message-text" class="form-control" placeholder="문자를 입력해주세요." rows="5" readonly></textarea>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <div include-html="./include/footer.html"></div>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+$.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- ChartJS -->
+<!-- <script src="plugins/chart.js/Chart.min.js"></script> -->
+<!-- Sparkline -->
+<!-- <script src="plugins/sparklines/sparkline.js"></script> -->
+<!-- JQVMap -->
+<!-- <script src="plugins/jqvmap/jquery.vmap.min.js"></script> -->
+<!-- <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
+<!-- jQuery Knob Chart -->
+<!-- <script src="plugins/jquery-knob/jquery.knob.min.js"></script> -->
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+<!-- AdminLTE for demo purposes -->
+<!-- <script src="dist/js/demo.js"></script> -->
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<!-- <script src="dist/js/pages/dashboard.js"></script> -->
+<!-- utils -->
+<script src="dist/js/utils.js"></script>
+<!-- Icons -->
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<!-- jQuery Core 3.5.1 -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- tooltip -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<!-- User Sciprt -->
+<script>includeHTML();</script>
+<script>
+  $(document).ready(function() {
+    if(!$.cookie('loginCheck') || $.cookie('loginCheck') != "check")
+      window.location.href = `index.html`;
+
+    $.ajax(
+      {
+        type:     "get",
+        // url:      "http://210.114.1.125:3000/message/point",
+        url:      "http://210.114.1.125:3000/message/point",
+        data:     {},
+        dataType: "json",
+        success: data => {
+          console.log(data)
+          $('#remainPoint').text(comma(data.point));
+        },
+        error: error =>  { console.log(error) }
+      });
+
+      // 발신번호 호출
+      popupClose();
+  })
+
+  function messageRequest(params){
+    var url = 'http://210.114.1.125:3000/message/simpleList'
+    $.get(url+'?' + $.param(params.data)).then(function (res) {
+      console.log(res)
+      params.success(res)
+    })
+  }
+
+  function getChargeURL() {
+    $.ajax(
+      {
+        type:     "get",
+        // url:      "http://210.114.1.125:3000/message/charge",
+        url:      "http://210.114.1.125:3000/message/charge",
+        data:     {},
+        dataType: "json",
+        success: data => {
+          console.log(data)
+          var popUrl = data.url;
+          var popOption = "width=830, height=685, resizable=no, scrollbars=no, status=no;";
+
+          window.open(popUrl,"",popOption);
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function getSenderNumberMgtURL() {
+    $.ajax(
+      {
+        type:     "get",
+        // url:      "http://210.114.1.125:3000/message/senderNumber",
+        url:      "http://210.114.1.125:3000/message/senderNumber",
+        data:     {},
+        dataType: "json",
+        success: data => {
+          console.log(data)
+          var popUrl = data.url;
+          var popName = "발신번호 관리"
+          var popOption = "width=830, height=685, resizable=no, scrollbars=no, status=no;";
+
+          popup(popUrl, popName, popOption);
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function popup(url, name, option) {
+    g_oWindow = window.open(url, name, option);
+    // 0.5초 마다 감지
+    g_oInterval = window.setInterval(function() {
+      try {
+          // 창이 꺼졌는지 판단
+        if( g_oWindow == null || g_oWindow.closed ) {
+          window.clearInterval(g_oInterval);
+          g_oWindow = null;
+          popupClose();
+        }
+      } catch (e) { }
+    }, 500);
+  };
+
+  function popupClose() {
+    $.ajax(
+      {
+        type:     "get",
+        // url:      "http://210.114.1.125:3000/message/senderList",
+        url:      "http://210.114.1.125:3000/message/senderList",
+        data:     {},
+        dataType: "json",
+        async:    false,
+        success: data => {
+          console.log('senderList')
+          console.log(data)
+          data.list.forEach((number, index) => {
+            if(number.representYN) {
+              $('#senderNumber').text(tellCheck(number.number));
+            }
+          });
+        },
+        error: error =>  { console.log(error) }
+      });
+  }
+
+  function messageTextPress(obj){
+    var byte;
+    if($('#methodType-SMS').hasClass('active')) byte = 90;
+    else byte = 2000;
+
+    if(calByte.getByteLength($(obj).val()) > byte){
+        alert('제한된 글자수를 넘었습니다.');
+        $(obj).val(calByte.cutByteLength($(obj).val(), byte));
+    }
+
+    $('#text_byte').text(calByte.getByteLength($(obj).val()));
+  }
+
+  $('button[name=typeBtn]').click(function () {
+    var type = $(this).attr('data-value');
+    var sms = $('#methodType-SMS');
+    var lms = $('#methodType-LMS');
+    if(type == 'sms') {
+        sms.attr('class', 'btn btn-default methodType active');
+        lms.attr('class', 'btn btn-default methodType');
+        $('#file').hide();
+        $('#mmsGuideText').hide();
+        $('#file').val('');
+        $('#max_byte').text(90);
+    } else if(type == 'lms'){
+        sms.attr('class', 'btn btn-default methodType');
+        lms.attr('class', 'btn btn-default methodType active');
+        $('#file').hide();
+        $('#mmsGuideText').hide();
+        $('#file').val('');
+        $('#max_byte').text(2000);
+    }
+    // else if(type == 'mms'){
+    //     sms.attr('class', 'btn');
+    //     lms.attr('class', 'btn');
+    //     mms.attr('class', 'btn active');
+    //     $('#file').show();
+    //     $('#mmsGuideText').show();
+    //     $('#max_byte').text(2000);
+    // }
+    messageTextPress($('#send-message-text'));
+  });
+  function blockNum(){
+        var ta = $('#send-message-text');
+        var txt = ta.val();
+        txt += '\r\n무료수신거부\r\n080-880-4177';
+        ta.val(txt);
+        messageTextPress(ta);
+  }
+
+  function messageSend() {
+    let type = $('#max_byte').text(), url = '';
+    let data = {
+      receiveNum : replaceAll($('#receiveNum').val(), '-', ''),
+      contents: $('#send-message-text').val(),
+      sendNum: replaceAll($('#senderNumber').text(), '-', ''),
+      receiveName: $('#receiveName').val(),
+    }
+    console.log(data);
+
+    if(!data.sendNum){
+      alert('발신번호를 등록해 주세요.')
+      return false;
+    }
+    if(!data.receiveNum){
+      alert('수신번호를 입력해 주세요.')
+      $('#receiveNum').focus()
+      return false;
+    }
+    if(!data.receiveName){
+      alert('수신자 이름을 입력해 주세요.')
+      $('#receiveName').focus()
+      return false;
+    }
+    if(!data.contents){
+      alert('메시지 내용을 입력해 주세요.')
+      $('#send-message-text').focus()
+      return false;
+    }
+
+    // 단문
+    if(type > 90){
+      url = `http://210.114.1.125:3000/message/sendLMS`
+    }
+    // 장문
+    else {
+      url = `http://210.114.1.125:3000/message/sendSMS`
+    }
+    $.ajax(
+      {
+        type:     "get",
+        url:      url,
+        data:     data,
+        dataType: "json",
+        async: false,
+        success: data => {
+          console.log(data)
+          alert("문자발송이 완료되었습니다.")
+          let params = {"type":"get","data":{"offset":0,"limit":10},"cache":true,"contentType":"application/json","dataType":"json"};
+          var url = 'http://210.114.1.125:3000/message/simpleList'
+          $.get(url+'?' + $.param(params.data)).then(function (res) {
+
+            $('#notice').bootstrapTable('load', res);
+            $('#notice').bootstrapTable('selectPage', 1);
+          })
+          $('#modal-message').modal("hide");
+        },
+        error: error =>  { console.log(error) }
+      });
+
+  }
+
+  function operateFormatter(value, row, index) {
+    return [
+      '<a class="like" href="javascript:void(0)" title="Like">',
+      '<i class="fa fa-search"></i>',
+      '</a>  '
+    ].join('')
+  }
+
+  window.operateEvents = {
+    'click .like': function (e, value, row, index) {
+      // window.location.href = `noticeInfo.html?id=${row.id}`;
+      console.log(row)
+      $('#modal-view-message').modal('show');
+      $.ajax(
+        {
+          type:     "get",
+          url:      `http://210.114.1.125:3000/message/getMessages`,
+          data:     {reciptNum: row.reciptNum},
+          dataType: "json",
+          async: false,
+          success: data => {
+            $('#modal-view-message').modal('show');
+            $('#view_receiveNum').val(`${data[0].receiveNum} 외 ${data.length - 1} 명`)
+            $('#view_receiveName').val(`${data[0].receiveName} 외 ${data.length - 1} 명`)
+            $('#view_send-message-text').val(data[0].content)
+          },
+          error: error =>  { console.log(error) }
+        });
+    },
+  }
+</script>
+</body>
+</html>
